@@ -16,6 +16,18 @@ from securekit.crypto.core import (
     secure_random,
     constant_time_compare
 )
+from securekit import __version__
+
+def test_version():
+    assert __version__ == "1.0.2"
+
+def test_imports():
+    # Test that main modules can be imported
+    from securekit.crypto import hash_password, verify_password
+    from securekit.kms import LocalKeyManager
+    assert callable(hash_password)
+    assert callable(verify_password)
+
 
 class TestBasicFunctionality:
     """Basic tests that should always pass"""

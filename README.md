@@ -1,11 +1,21 @@
 # SecureKit 🔐
 
-A comprehensive cryptographic toolkit with secure defaults for Python applications. SecureKit provides production-ready cryptography primitives, key management, and framework integrations with a focus on security, ease of use, and best practices.
+<div align="center">
+
+![SecureKit Logo](docs/images/securekit-logo.png)
+
+A comprehensive cryptographic toolkit with secure defaults for Python applications.
 
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/badge/license-Apache%202.0-green)
 ![PyPI Version](https://img.shields.io/pypi/v/securekit)
-![Tests](https://img.shields.io/badge/tests-100%25%20passing-brightgreen)
+![Tests](https://github.com/anshuman365/securekit/actions/workflows/ci.yml/badge.svg)
+
+[📚 Documentation](https://github.com/anshuman365/securekit#readme) •
+[🚀 Quick Start](https://github.com/anshuman365/securekit#quick-start-) •
+[💬 Discussions](https://github.com/anshuman365/securekit/discussions)
+
+</div>
 
 ## Features ✨
 
@@ -329,11 +339,11 @@ Report security issues to: nexoraindustries@gmail.com
 
 ## License 📄
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License - see the [LICENSE](https://github.com/anshuman365/securekit#LICENSE) file for details.
 
 ## Support 💬
 
-- **Documentation**: [https://securekit.readthedocs.io](https://securekit.readthedocs.io)
+- **Documentation**: [https://github.com/anshuman365/securekit#readme](https://github.com/anshuman365/securekit#readme)
 - **Issue Tracker**: [https://github.com/anshuman365/securekit/issues](https://github.com/anshuman365/securekit/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/anshuman365/securekit/discussions)
 
