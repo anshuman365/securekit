@@ -1,45 +1,8 @@
-name: SecureKit CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11, 3.12]
-
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .[dev]
-    
-    - name: Run tests
-      run: |
-        pytest tests/ -v
-    
-    - name: Run security audit
-      run: |
-        pip install bandit safety
-        bandit -r src/securekit -f html -o security-report.html
-        safety check
-
-  deploy:
+# Add this to your existing CI file
+  publish:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     
     steps:
     - uses: actions/checkout@v4

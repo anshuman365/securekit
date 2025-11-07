@@ -3,8 +3,13 @@ MANIFEST.in
 README.md
 pyproject.toml
 requirements.txt
+setup.py
+.github/workflows/ci.yml
+dist/securekit-1.0.2-py3-none-any.whl
+dist/securekit-1.0.2.tar.gz
 docs/deployment-guide.md
 docs/threat-model.md
+docs/images/securekit-logo.png
 examples/fastapi_app.py
 examples/flask_app.py
 examples/django_app/models.py
