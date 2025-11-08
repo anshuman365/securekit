@@ -26,11 +26,11 @@ jobs:
     
     - name: Run Bandit security scan
       run: |
-        bandit -c .bandit.yml -r src/securekit -f html -o security-report.html
+        bandit -c .bandit.yml -r src/securekit -f txt
     
     - name: Run Safety check
       run: |
-        safety check --json --output safety-report.json
+        safety check
     
     - name: Upload security reports
       uses: actions/upload-artifact@v4
