@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "securekit"
 description = "Production-ready cryptography library for Python"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
     {name = "SecureKit Team", email = "anshumansingh3697@gmail.com"}
 ]
