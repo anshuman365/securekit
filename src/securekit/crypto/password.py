@@ -65,7 +65,7 @@ class PasswordHasher:
         Based on Ory's Argon2 calibration methodology.
         """
         # FIX: Use a non-password-like string to avoid security warnings
-        test_password = "calibration_test_string_do_not_use_in_production"
+    test_password = "calibration_test_string_do_not_use_in_production"  # nosec: B105 - This is not a real password, just for calibration
         time_cost = 2
         
         # Security: Limit calibration attempts to prevent DoS

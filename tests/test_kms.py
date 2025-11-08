@@ -189,7 +189,7 @@ class TestVaultKeyManager:
     
     @pytest.fixture
     def mock_hvac(self):
-        # FIX: Mock the import inside the method
+        # FIX: Mock the import at the correct level - hvac is imported inside _get_client
         with patch('securekit.kms.vault.hvac') as mock_hvac:
             mock_client = Mock()
             mock_client.is_authenticated.return_value = True
@@ -210,7 +210,7 @@ class TestVaultKeyManager:
             yield mock_client
     
     def test_generate_key(self, mock_hvac):
-        # FIX: Patch _get_client only
+        # FIX: Mock the _get_client method
         with patch.object(VaultKeyManager, '_get_client') as mock_get_client:
             mock_get_client.return_value = mock_hvac
             
