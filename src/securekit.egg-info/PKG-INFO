@@ -1,24 +1,28 @@
 Metadata-Version: 2.4
 Name: securekit
-Version: 1.0.2
+Version: 1.0.3
 Summary: Production-ready cryptography library for Python
+Home-page: https://github.com/anshuman365/securekit
+Author: SecureKit Team
 Author-email: SecureKit Team <anshumansingh3697@gmail.com>
-License: Apache-2.0
+License: MIT
 Project-URL: Homepage, https://github.com/anshuman365/securekit
-Project-URL: Documentation, https://securekit.readthedocs.io
+Project-URL: Documentation, https://github.com/anshuman365/securekit#readme
 Project-URL: Repository, https://github.com/anshuman365/securekit
 Project-URL: Issues, https://github.com/anshuman365/securekit/issues
-Keywords: cryptography,security,encryption,passwords
-Classifier: Development Status :: 4 - Beta
+Keywords: cryptography,security,encryption,kms,hashing
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: Apache Software License
+Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Security :: Cryptography
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
@@ -26,23 +30,24 @@ Requires-Dist: argon2-cffi>=21.3.0
 Requires-Dist: cryptography>=41.0.0
 Requires-Dist: pynacl>=1.5.0
 Provides-Extra: aws
-Requires-Dist: boto3>=1.26.0; extra == "aws"
+Requires-Dist: boto3>=1.28.0; extra == "aws"
 Provides-Extra: vault
-Requires-Dist: hvac>=1.0.0; extra == "vault"
+Requires-Dist: hvac>=1.1.0; extra == "vault"
 Provides-Extra: django
 Requires-Dist: Django>=3.2.0; extra == "django"
 Provides-Extra: flask
 Requires-Dist: Flask>=2.0.0; extra == "flask"
 Provides-Extra: fastapi
 Requires-Dist: fastapi>=0.68.0; extra == "fastapi"
-Requires-Dist: uvicorn>=0.15.0; extra == "fastapi"
 Provides-Extra: dev
-Requires-Dist: pytest>=6.0; extra == "dev"
-Requires-Dist: pytest-cov>=2.0; extra == "dev"
-Requires-Dist: black>=22.0; extra == "dev"
-Requires-Dist: isort>=5.0; extra == "dev"
-Requires-Dist: mypy>=0.910; extra == "dev"
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: bandit>=1.7.0; extra == "dev"
+Requires-Dist: safety>=2.0.0; extra == "dev"
+Dynamic: author
+Dynamic: home-page
 Dynamic: license-file
+Dynamic: requires-python
 
 # SecureKit 🔐
 

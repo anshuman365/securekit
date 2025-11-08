@@ -1,5 +1,3 @@
-# [file name]: tests/test_basic.py
-# [file content begin]
 """
 Basic functionality tests for PyPI verification
 """
@@ -19,7 +17,7 @@ from securekit.crypto.core import (
 from securekit import __version__
 
 def test_version():
-    assert __version__ == "1.0.2"
+    assert __version__ == "1.0.3"
 
 def test_imports():
     # Test that main modules can be imported
@@ -88,4 +86,3 @@ class TestBasicFunctionality:
         
         assert constant_time_compare(a, b) == True
         assert constant_time_compare(a, c) == False
-# [file content end]

@@ -1,2 +1,2 @@
-[console_scripts]
-securekit = securekit.cli.main:cli
+[securekit.cli]
+main = securekit.cli.main:main

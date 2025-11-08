@@ -1,9 +1,8 @@
-# [file name]: src/securekit/__init__.py
 """
 SecureKit - Production-ready cryptography library for Python
 """
 
-__version__ = "1.0.2"  
+__version__ = "1.0.3"  
 __author__ = "SecureKit Team"
 __email__ = "anshumansingh3697@gmail.com" 
 
