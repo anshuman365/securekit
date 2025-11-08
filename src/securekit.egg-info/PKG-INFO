@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: securekit
-Version: 1.0.3
+Version: 1.0.2
 Summary: Production-ready cryptography library for Python
 Author-email: SecureKit Team <anshumansingh3697@gmail.com>
 License: Apache-2.0
