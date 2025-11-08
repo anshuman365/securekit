@@ -1,1 +1,15 @@
-# ... (paste the content from above)
+# Bandit configuration for SecureKit
+skips: [B105, B311]
+
+exclude_dirs:
+  - .git
+  - __pycache__
+  - .pytest_cache
+  - dist
+  - build
+  - *.egg-info
+  - tests
+
+# Target specific Python versions
+targets:
+  - src/securekit

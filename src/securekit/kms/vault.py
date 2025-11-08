@@ -3,12 +3,20 @@ HashiCorp Vault adapter implementation
 """
 
 import logging
-import time  # FIX: Add missing import
-from base64 import b64encode, b64decode  # FIX: Add missing imports
+import time
+from base64 import b64encode, b64decode
 from typing import Dict, Any, List, Optional
 from securekit.kms.base import KeyManager
 
 logger = logging.getLogger(__name__)
+
+# Check if hvac is available at module level for testing
+try:
+    import hvac
+    HVAC_AVAILABLE = True
+except ImportError:
+    HVAC_AVAILABLE = False
+    hvac = None
 
 class VaultKeyManager(KeyManager):
     """HashiCorp Vault adapter for securekit"""
@@ -22,6 +30,11 @@ class VaultKeyManager(KeyManager):
             token: Vault authentication token
             mount_point: Transit engine mount point
         """
+        # Allow bypassing the HVAC check for testing
+        import os
+        if not HVAC_AVAILABLE and os.getenv('SECUREKIT_TESTING') != 'true':
+            raise RuntimeError("hvac package is required for Vault support. Install with: pip install hvac")
+            
         self.url = url
         self.token = token
         self.mount_point = mount_point
@@ -32,12 +45,10 @@ class VaultKeyManager(KeyManager):
         """Get HVAC client (lazy initialization)"""
         if self._client is None:
             try:
-                import hvac
+                # Use the global hvac import
                 self._client = hvac.Client(url=self.url, token=self.token)
                 if not self._client.is_authenticated():
                     raise RuntimeError("Vault authentication failed")
-            except ImportError:
-                raise RuntimeError("hvac required for Vault support")
             except Exception as e:
                 logger.error(f"Failed to initialize Vault client: {e}")
                 raise RuntimeError(f"Vault client initialization failed: {str(e)}")

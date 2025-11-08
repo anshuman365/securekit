@@ -187,74 +187,99 @@ class TestAWSKeyManager:
 class TestVaultKeyManager:
     """Test HashiCorp Vault adapter"""
     
-    @pytest.fixture
-    def mock_hvac(self):
-        # FIX: Mock the import at the correct level - hvac is imported inside _get_client
-        with patch('securekit.kms.vault.hvac') as mock_hvac:
-            mock_client = Mock()
-            mock_client.is_authenticated.return_value = True
-            mock_hvac.Client.return_value = mock_client
-            
-            # Mock transit responses
-            mock_client.secrets.transit.create_key.return_value = None
-            mock_client.secrets.transit.encrypt_data.return_value = {
-                'data': {'ciphertext': 'vault:wrapped_data'}
-            }
-            mock_client.secrets.transit.decrypt_data.return_value = {
-                'data': {'plaintext': 'b3JpZ2luYWxfa2V5X2RhdGE='}  # base64 for 'original_key_data'
-            }
-            mock_client.secrets.transit.list_keys.return_value = {
-                'data': {'keys': ['key1', 'key2']}
-            }
-            
-            yield mock_client
+    def test_generate_key(self):
+        """Test Vault key generation - skip if hvac not available"""
+        import os
+        # Set testing environment variable to bypass HVAC check
+        os.environ['SECUREKIT_TESTING'] = 'true'
+        
+        try:
+            # Mock hvac at the module level where it's used
+            with patch('securekit.kms.vault.hvac') as mock_hvac:
+                mock_client = Mock()
+                mock_client.is_authenticated.return_value = True
+                mock_hvac.Client.return_value = mock_client
+                
+                # Mock transit responses
+                mock_client.secrets.transit.create_key.return_value = None
+                
+                km = VaultKeyManager(url="http://localhost:8200", token="test-token")
+                key_id = km.generate_key("encryption")
+                
+                # Just check it returns a string (time will be real)
+                assert key_id.startswith("securekit-encryption-")
+                mock_client.secrets.transit.create_key.assert_called_once()
+        finally:
+            # Clean up environment variable
+            if 'SECUREKIT_TESTING' in os.environ:
+                del os.environ['SECUREKIT_TESTING']
     
-    def test_generate_key(self, mock_hvac):
-        # FIX: Mock the _get_client method
-        with patch.object(VaultKeyManager, '_get_client') as mock_get_client:
-            mock_get_client.return_value = mock_hvac
-            
-            km = VaultKeyManager(url="http://localhost:8200", token="test-token")
-            key_id = km.generate_key("encryption")
-            
-            # Just check it returns a string (time will be real)
-            assert key_id.startswith("securekit-encryption-")
-            mock_hvac.secrets.transit.create_key.assert_called_once()
+    def test_wrap_unwrap_key(self):
+        """Test Vault key wrapping - skip if hvac not available"""
+        import os
+        os.environ['SECUREKIT_TESTING'] = 'true'
+        
+        try:
+            with patch('securekit.kms.vault.hvac') as mock_hvac:
+                mock_client = Mock()
+                mock_client.is_authenticated.return_value = True
+                mock_hvac.Client.return_value = mock_client
+                
+                # Mock transit responses
+                mock_client.secrets.transit.encrypt_data.return_value = {
+                    'data': {'ciphertext': 'vault:wrapped_data'}
+                }
+                mock_client.secrets.transit.decrypt_data.return_value = {
+                    'data': {'plaintext': 'b3JpZ2luYWxfa2V5X2RhdGE='}  # base64 for 'original_key_data'
+                }
+                
+                km = VaultKeyManager(url="http://localhost:8200", token="test-token")
+                
+                import base64
+                key_to_wrap = b"test_key_data"
+                wrapped = km.wrap_key(key_to_wrap, "kek-id")
+                
+                assert wrapped == b'vault:wrapped_data'
+                mock_client.secrets.transit.encrypt_data.assert_called_once_with(
+                    name='kek-id',
+                    plaintext=base64.b64encode(key_to_wrap).decode('utf-8')
+                )
+                
+                unwrapped = km.unwrap_key(b'vault:wrapped_data', "kek-id")
+                assert unwrapped == b'original_key_data'
+                mock_client.secrets.transit.decrypt_data.assert_called_once_with(
+                    name='kek-id',
+                    ciphertext='vault:wrapped_data'
+                )
+        finally:
+            if 'SECUREKIT_TESTING' in os.environ:
+                del os.environ['SECUREKIT_TESTING']
     
-    def test_wrap_unwrap_key(self, mock_hvac):
-        with patch.object(VaultKeyManager, '_get_client') as mock_get_client:
-            mock_get_client.return_value = mock_hvac
-            
-            km = VaultKeyManager(url="http://localhost:8200", token="test-token")
-            
-            import base64
-            key_to_wrap = b"test_key_data"
-            wrapped = km.wrap_key(key_to_wrap, "kek-id")
-            
-            assert wrapped == b'vault:wrapped_data'
-            mock_hvac.secrets.transit.encrypt_data.assert_called_once_with(
-                name='kek-id',
-                plaintext=base64.b64encode(key_to_wrap).decode('utf-8')
-            )
-            
-            unwrapped = km.unwrap_key(b'vault:wrapped_data', "kek-id")
-            assert unwrapped == b'original_key_data'
-            mock_hvac.secrets.transit.decrypt_data.assert_called_once_with(
-                name='kek-id',
-                ciphertext='vault:wrapped_data'
-            )
-    
-    def test_list_keys(self, mock_hvac):
-        with patch.object(VaultKeyManager, '_get_client') as mock_get_client:
-            mock_get_client.return_value = mock_hvac
-            
-            km = VaultKeyManager(url="http://localhost:8200", token="test-token")
-            
-            keys = km.list_keys()
-            
-            assert len(keys) == 2
-            assert keys[0]['key_id'] == 'key1'
-            mock_hvac.secrets.transit.list_keys.assert_called_once()
+    def test_list_keys(self):
+        """Test Vault key listing - skip if hvac not available"""
+        import os
+        os.environ['SECUREKIT_TESTING'] = 'true'
+        
+        try:
+            with patch('securekit.kms.vault.hvac') as mock_hvac:
+                mock_client = Mock()
+                mock_client.is_authenticated.return_value = True
+                mock_hvac.Client.return_value = mock_client
+                
+                mock_client.secrets.transit.list_keys.return_value = {
+                    'data': {'keys': ['key1', 'key2']}
+                }
+                
+                km = VaultKeyManager(url="http://localhost:8200", token="test-token")
+                
+                keys = km.list_keys()
+                
+                assert len(keys) == 2
+                assert keys[0]['key_id'] == 'key1'
+                mock_client.secrets.transit.list_keys.assert_called_once()
+        finally:
+            if 'SECUREKIT_TESTING' in os.environ:
+                del os.environ['SECUREKIT_TESTING']
 
 class TestCrossKMSCompatibility:
     """Test compatibility between different KMS implementations"""
